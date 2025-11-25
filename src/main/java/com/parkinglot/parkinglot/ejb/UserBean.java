@@ -26,7 +26,7 @@ public class UserBean {
         LOG.info("findAllUsers");
         try{
             TypedQuery<User> typedQuery = entityManager.createQuery("SELECT c FROM User c", User.class);
-            List<User> users = typedQuery.getResultList();
+            List<User> users = typedQuery.getResultList ();
             return copyUsersToDto(users);
         }catch (Exception ex){
             throw new EJBException(ex);
@@ -37,7 +37,7 @@ public class UserBean {
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : users) {
             UserDto userDto = new UserDto(
-
+                    user.getId(),
                     user.getUsername(),
                     user.getEmail()
             );
