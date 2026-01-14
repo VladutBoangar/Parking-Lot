@@ -1,8 +1,9 @@
-package com.parkinglot.parkinglot.servlets;
+package com.parkinglot.parkinglot.servlets.cars;
 
 
 import com.parkinglot.parkinglot.common.CarDto;
 import com.parkinglot.parkinglot.ejb.CarsBean;
+import jakarta.annotation.security.DeclareRoles;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 
+@DeclareRoles({"READ_CARS", "WRITE_CARS", "READ_USERS", "WRITE_USERS", "INVOICING"})
 @MultipartConfig
 @WebServlet(name = "AddCarPhoto", value = "/AddCarPhoto")
 public class AddCarPhoto extends HttpServlet {
@@ -27,7 +29,7 @@ public class AddCarPhoto extends HttpServlet {
         CarDto car = carsBean.findById(carId);
         request.setAttribute("car", car);
 
-     request.getRequestDispatcher("/WEB-INF/pages/addCarPhoto.jsp").forward(request, response);
+     request.getRequestDispatcher("/WEB-INF/pages/cars/addCarPhoto.jsp").forward(request, response);
  }
 
 @Override

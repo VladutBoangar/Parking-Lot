@@ -79,8 +79,39 @@ public class UserBean {
         return usernames;
     }
 
+    public UserDto findById(Long userId) {
+        LOG.info("findById: " + userId);
+        try {
+            User user = entityManager.find(User.class, userId);
+            if (user == null) {
+                return null;
+            }
+            return new UserDto(user.getId(), user.getUsername(), user.getEmail());
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
 
+    public void updateUser(Long userId, String username, String email, String password, Collection<String> groups) {
+        LOG.info("updateUser");
 
+        User user = entityManager.find(User.class, userId);
+        user.setUsername(username);
+        user.setEmail(email);
+
+        // Task 3: Schimbă parola DOAR dacă nu e goală
+        if (password != null && !password.trim().isEmpty()) {
+            user.setPassword(passwordBean.convertToSha256(password));
+        }
+
+        // Șterge grupurile vechi
+        entityManager.createQuery("DELETE FROM UserGroup ug WHERE ug.username = :username")
+                .setParameter("username", username)
+                .executeUpdate();
+
+        // Adaugă grupurile noi
+        assignGroupsToUser(username, groups);
+    }
 
 
 }

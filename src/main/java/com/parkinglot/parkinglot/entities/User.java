@@ -1,6 +1,7 @@
 package com.parkinglot.parkinglot.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,28 +13,43 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Column(name = "username")
+    @Basic
+    @Column(name = "username",unique = true,nullable = false, length= 100)
     private String username;
+    @Email
+    @Column(name = "email",unique = true,nullable = false, length = 100)
+    private String email;
+    @Column(name = "password")
+    private String password;
+
+    @ManyToMany
+    @JoinTable(name = "users_userGroups",
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "username"))
+    private List<UserGroup> userGroups = new ArrayList<>();
+
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
+    private List<Car> cars = new ArrayList<>();
+
+    public List<UserGroup> getUserGroups() {
+        return userGroups;
+    }
+
+    public void setUserGroups(List<UserGroup> userGroups) {
+        this.userGroups = userGroups;
+    }
+
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
+    }
 
     public String getUsername() {
         return username;
     }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Column(name="email")
-    private String email;
 
     public String getEmail() {
         return email;
@@ -43,10 +59,6 @@ public class User {
         this.email = email;
     }
 
-    @Column(name="password")
-    private String password;
-
-
     public String getPassword() {
         return password;
     }
@@ -55,14 +67,16 @@ public class User {
         this.password = password;
     }
 
-    @OneToMany(mappedBy = "owner", orphanRemoval = true)
-    private List<Car> cars = new ArrayList<>();
-
-    public List<Car> getCars() {
-        return cars;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setCars(List<Car> cars) {
-        this.cars = cars;
+    public Long getId() {
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }

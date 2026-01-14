@@ -1,6 +1,11 @@
 package com.parkinglot.parkinglot.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name = "usergroups")
@@ -10,16 +15,30 @@ public class UserGroup {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "userGroup")
+    private String userGroup;
 
     @Column(name = "username")
     private String username;
+
+    @ManyToMany(mappedBy = "userGroups")
+    private List<User> users = new ArrayList<>();
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public String getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(String userGroup) {
+        this.userGroup = userGroup;
+    }
 
     public String getUsername() {
         return username;
@@ -29,15 +48,12 @@ public class UserGroup {
         this.username = username;
     }
 
-    @Column(name = "userGroup")
-    private String userGroup;
-
-    public String getUserGroup() {
-        return userGroup;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserGroup(String userGroup) {
-        this.userGroup = userGroup;
+    public void setId(Long id) {
+        this.id = id;
     }
 
 

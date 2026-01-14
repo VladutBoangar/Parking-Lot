@@ -163,5 +163,14 @@ public class CarsBean {
                 photo.getFileContent());
     }
 
+    public long countCars() {
+        LOG.info("countCars");
+        try {
+            return (Long) entityManager.createQuery("SELECT COUNT(c) FROM Car c").getSingleResult();
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
+
 
 }
